@@ -13,7 +13,7 @@
       <div class="card 3">
         {{ forloop.counter }}
         <div class="card-header">
-          Категория: <a href="{% url 'Category' item.category.pk %}"> {{ item.category }}</a>
+          Категория: <a href="{{ item.category.get_absolute.url }}"> {{ item.category }}</a>
         </div>
       <div class="media" style="display:flex">
       <div class="media-photo">
@@ -29,7 +29,7 @@
           {% autoescape off %}
             <p class="card-text">{{ item.content|truncatechars:60|linebreaks }}</p>
           {% endautoescape %}
-          <a href="#" class="btn btn-primary">Read more...</a>
+          <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Read more...</a>
         </div>
         <div class="card-footer text-muted">
           {{ item.created_at|date:'Y-m-d H:i' }}
