@@ -2,14 +2,24 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import MyMixin
+from django.core.paginator import Paginator
+
 from .models import News, Category
 from .forms import NewsForm
+
+# def test(request):
+#     objects = ['john', 'paul', 'george', 'ringo', 'john2', 'paul2', 'george2', 'ringo2']
+#     paginator = Paginator(object, 2)
+#     page_num = request.GET.get('page', 1)
+#     page_objects = paginator.get_page(page_num)
+#     return render(request, 'News/test.html', {'page_obj': page_objects})
 
 class HomeNews(ListView, MyMixin):
     model = News
     context_object_name = 'news'
     template_name = 'News/home_news_list.html'
     extra_context = {'title': 'Главная'}
+    paginate_by = 4
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,6 +35,7 @@ class NewsByCategory(ListView, ):
     template_name = 'News/home_list.html'
     context_object_name = 'news'
     allow_empty = False
+    paginate_by = 3
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
