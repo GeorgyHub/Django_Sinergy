@@ -8,30 +8,38 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 from .models import News, Category
-from .forms import NewsForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm
+from django.contrib.auth import login, logout
 
-# def test(request):
-#     objects = ['john', 'paul', 'george', 'ringo', 'john2', 'paul2', 'george2', 'ringo2']
-#     paginator = Paginator(object, 2)
-#     page_num = request.GET.get('page', 1)
-#     page_objects = paginator.get_page(page_num)
-#     return render(request, 'News/test.html', {'page_obj': page_objects})
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm()
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.sucess(request, 'Регистрация прошла успешна')
-            return redirect('login')
+            messages.success(request, 'Регистрация прошла успешна')
+            user = form.save()
+            login(request, user)
         else:
             messages.error(request, 'Ошибка регистрации')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, 'News/register.html', {'form': form})
 
-def login(request):
-    return render(request, 'News/login.html')
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('Home')
+    else:
+        form = UserLoginForm
+    return render(request, 'News/login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('Login')
 
 class HomeNews(ListView, MyMixin):
     model = News
