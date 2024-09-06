@@ -1,8 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from .utils import MyMixin
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+
 
 from .models import News, Category
 from .forms import NewsForm
@@ -13,6 +16,22 @@ from .forms import NewsForm
 #     page_num = request.GET.get('page', 1)
 #     page_objects = paginator.get_page(page_num)
 #     return render(request, 'News/test.html', {'page_obj': page_objects})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm()
+        if form.is_valid():
+            form.save()
+            messages.sucess(request, 'Регистрация прошла успешна')
+            return redirect('login')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = UserCreationForm()
+    return render(request, 'News/register.html', {'form': form})
+
+def login(request):
+    return render(request, 'News/login.html')
 
 class HomeNews(ListView, MyMixin):
     model = News
