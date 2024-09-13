@@ -1,6 +1,7 @@
 <!doctype html>
 {% include 'inc/_nav.html' %}
 {% load static %}
+{% load cache %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -10,14 +11,18 @@
     {% comment %} <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> {% endcomment %}
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
   </head>
-  <body>
+  <body style="background-color: #ccc">
+    <div class="title" style="margin-left: 900px">
+      <h1>{{ title }}</h1>
+    </div>
       <div class="conteiner mt-3">
-        <h1>{{ title }}</h1>
         <div class="row" style="magrin-left: 0px;">
 
+          {% cache 500 sidebar %}
           <div class="col-md-4" style="magrin-left: 0px;">
             {% block sidebar %}sidebar{% endblock %}
           </div>
+          {% endcache %}
 
           {% if messages %}
           {% for message in messages %}
