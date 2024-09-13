@@ -57,9 +57,9 @@ class HomeNews(ListView, MyMixin):
     def get_queryset(self):
         return News.objects.filter(is_published = True).select_related('category')
     
-class NewsByCategory(ListView, ):
+class NewsByCategory(ListView):
     model = News
-    template_name = 'News/home_list.html'
+    template_name = 'News/home_news_list.html'
     context_object_name = 'news'
     allow_empty = False
     paginate_by = 3
